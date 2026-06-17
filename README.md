@@ -163,6 +163,7 @@ User receives:
 - The top thrift listing found.
 - Outfit recommendations.
 - A shareable fit card caption.
+
 ---
 
 ## Error Handling and Fail Points
@@ -189,6 +190,7 @@ planning.md helped me clearly define the tool interfaces and planning loop befor
 
 **One divergence from your spec, and why:**
 My original plan was to use an LLM to parse user queries into description, size, and price. During implementation I instead used regular expressions because the query format was simple and regex parsing was faster, more predictable, and easier to test.
+
 ---
 
 ## AI Usage

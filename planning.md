@@ -108,6 +108,7 @@ The session tracks:
 - `session["error"]`: an error message if something goes wrong
 
 The output from `search_listings` becomes the input for `suggest_outfit`. Then the output from `suggest_outfit` becomes the input for `create_fit_card`.
+
 ---
 
 ## Error Handling
