@@ -176,6 +176,8 @@ User receives:
 | `suggest_outfit` | Wardrobe is empty | Generates general styling advice instead of referencing wardrobe items. |
 | `create_fit_card` | Outfit input is missing or empty | Returns a descriptive error message instead of crashing. |
 
+In addition, I tested `designer ballgown size XXS under $5`, which returned no search results. The agent displayed: "I couldn't find any listings that matched that exact request. Try using a broader description, increasing your budget, or removing the size filter." It then stopped before calling `suggest_outfit()` or `create_fit_card()`.
+
 ---
 
 ## Spec Reflection
