@@ -41,7 +41,6 @@ Suggests one or more outfit combinations using the selected thrifted item and th
 - `new_item` (dict): The thrifted clothing item selected from the search results.
 - `wardrobe` (dict): A wardrobe dictionary containing an `items` list of the user's existing clothing pieces.
 
-
 **What it returns:**
 Returns a non-empty string containing outfit suggestions. The suggestions should incorporate the selected thrifted item and, when possible, specific items from the user's wardrobe.
 
@@ -141,51 +140,8 @@ For each tool, describe the specific failure mode you're handling and what the a
      an embedded image or screenshot cannot be evaluated.
      You'll share this diagram with an AI tool when asking it to implement
      the planning loop and each individual tool. -->
-```text
-User query
-    |
-    v
-Planning Loop
-    |
-    |-- calls search_listings(description, size, max_price)
-    |       |
-    |       |-- if results = []
-    |       |       |
-    |       |       v
-    |       |   session["error"] = "No listings found..."
-    |       |   return session
-    |       |
-    |       |-- if results found
-    |               |
-    |               v
-    |          session["search_results"] = results
-    |          session["selected_item"] = results[0]
-    |
-    |-- calls suggest_outfit(session["selected_item"], wardrobe)
-    |       |
-    |       |-- if wardrobe is empty
-    |       |       |
-    |       |       v
-    |       |   return general styling advice
-    |       |
-    |       v
-    |   session["outfit_suggestion"] = outfit text
-    |
-    |-- calls create_fit_card(session["outfit_suggestion"], session["selected_item"])
-            |
-            |-- if outfit is empty
-            |       |
-            |       v
-            |   return descriptive error message
-            |
-            v
-        session["fit_card"] = caption text
 
-Final output:
-- selected listing
-- outfit suggestion
-- fit card
-- error message if something failed
+flowchart TD A[User Query] --> B[Planning Loop] B --> C[search_listings] C --> D{Results Found?} D -- No --> E[Set Error Message] E --> F[Return Session] D -- Yes --> G[Store selected_item in Session] G --> H[suggest_outfit] H --> I[Store outfit_suggestion in Session] I --> J[create_fit_card] J --> K[Store fit_card in Session] K --> L[Return Completed Session] M[(Session State)] G --> M I --> M J --> M M --> H M --> J
 ---
 
 ## AI Tool Plan
@@ -202,16 +158,16 @@ Final output:
      before trusting it" is a plan. -->
 
 **Milestone 3 — Individual tool implementations:**
-I will use Claude to help implement each tool one at a time. For `search_listings`, I will give Claude the Tool 1 section of this planning document and ask it to implement the function in `tools.py` using `load_listings()` from `utils/data_loader.py`. I will verify the code by checking that it filters by description, size, and max price, returns a list of dictionaries, sorts matches by relevance, and returns `[]` when no listings match.
+I will use Claude as a planning and debugging assistant while I implement each tool. For search_listings, I will use the Tool 1 section of this planning document to guide my implementation in tools.py, especially the inputs, return value, and failure mode. I may ask Claude to review my approach or help troubleshoot errors, but I will verify the function myself by checking that it filters by description, size, and max price, sorts matches by relevance, and returns [] when no listings match.
 
-For `suggest_outfit`, I will give Claude the Tool 2 section and ask it to implement the function using the Groq client already provided in `tools.py`. I will verify that it handles both a normal wardrobe and an empty wardrobe. I will test it with `get_example_wardrobe()` and `get_empty_wardrobe()`.
+For suggest_outfit, I will use the Tool 2 section as my implementation guide and use the Groq client already provided in tools.py. I may ask Claude for help reviewing the prompt structure or debugging API issues. I will verify that the tool handles both a normal wardrobe and an empty wardrobe by testing it with get_example_wardrobe() and get_empty_wardrobe().
 
-For `create_fit_card`, I will give Claude the Tool 3 section and ask it to implement the function using the selected item and outfit suggestion. I will verify that it returns a caption-style string, mentions the item naturally, and returns a clear error message if the outfit input is empty.
+For create_fit_card, I will use the Tool 3 section to guide the function behavior. I may ask Claude for feedback on whether the prompt matches the project requirements, but I will test the function myself to confirm that it returns a caption-style string, mentions the item naturally, and returns a clear error message if the outfit input is empty.
 
 **Milestone 4 — Planning loop and state management:**
-I will use Claude to help implement `run_agent()` in `agent.py`. I will provide the Planning Loop, State Management, Error Handling, and Architecture sections from this planning document. I expect Claude to produce code that calls tools conditionally, stores tool outputs in the session dictionary, and returns early when search results are empty.
+I will use Claude to review my planning loop, state management approach, and architecture diagram before and during implementation. I will provide the Planning Loop, State Management, Error Handling, and Architecture sections from this planning document and ask for feedback on whether the logic correctly branches based on tool results.
 
-Before trusting the generated code, I will check that the agent does not call all three tools regardless of the results. I will test one successful query and one no-results query to confirm that state is passed correctly between tools and that the session dictionary updates as described in the specification.
+I will implement and verify run_agent() by checking that it calls tools conditionally, stores tool outputs in the session dictionary, and returns early when search results are empty. I will test one successful query and one no-results query to confirm that state is passed correctly between tools and that the session dictionary updates as described in the specification.
 ---
 
 ## A Complete Interaction (Step by Step)
