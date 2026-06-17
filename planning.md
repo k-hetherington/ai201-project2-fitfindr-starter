@@ -195,6 +195,7 @@ For create_fit_card, I will use the Tool 3 section to guide the function behavio
 I will use Claude to review my planning loop, state management approach, and architecture diagram before and during implementation. I will provide the Planning Loop, State Management, Error Handling, and Architecture sections from this planning document and ask for feedback on whether the logic correctly branches based on tool results.
 
 I will implement and verify run_agent() by checking that it calls tools conditionally, stores tool outputs in the session dictionary, and returns early when search results are empty. I will test one successful query and one no-results query to confirm that state is passed correctly between tools and that the session dictionary updates as described in the specification.
+
 ---
 
 ## A Complete Interaction (Step by Step)
