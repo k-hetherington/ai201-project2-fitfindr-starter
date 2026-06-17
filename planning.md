@@ -141,8 +141,6 @@ For each tool, describe the specific failure mode you're handling and what the a
      You'll share this diagram with an AI tool when asking it to implement
      the planning loop and each individual tool. -->
 
-## Architecture
-
 ```mermaid
 flowchart TD
     A[User Query] --> B[Planning Loop]
@@ -206,26 +204,25 @@ Write out what a full user interaction looks like from start to finish — tool 
 **Example user query:** "I'm looking for a vintage graphic tee under $30. I mostly wear baggy jeans and chunky sneakers. What's out there and how would I style it?"
 
 **Step 1:**
-<!-- What does the agent do first? Which tool is called? With what input? -->
-The agent starts by identifying the item request from the user query. It calls:
-search_listings(description="vintage graphic tee", size=None, max_price=30.0)
+The agent starts by identifying the item request from the user query. 
+
+It calls: search_listings(description="vintage graphic tee", size=None, max_price=30.0)
 **Step 2:**
-<!-- What happens next? What was returned from step 1? What tool is called now? -->
-search_listings returns a list of matching listing dictionaries. The agent stores the full list in:
-session["search_results"] = results
-Then it selects the first/best result and stores it in:
-session["selected_item"] = results[0]
+search_listings returns a list of matching listing dictionaries. 
+
+The agent stores the full list in: session["search_results"] = results
+
+Then it selects the first/best result and stores it in: session["selected_item"] = results[0]
 **Step 3:**
-<!-- Continue until the full interaction is complete -->\
-The agent calls:
-suggest_outfit(session["selected_item"], wardrobe)
-The wardrobe may come from get_example_wardrobe() during testing. The outfit suggestion is stored in:
-session["outfit_suggestion"] = outfit_suggestion
+The agent calls suggest_outfit(session["selected_item"], wardrobe)
+The wardrobe may come from get_example_wardrobe() during testing.
+
+The outfit suggestion is stored in session["outfit_suggestion"] = outfit_suggestion
+
 **Step 4:**
-The agent calls:
-create_fit_card(session["outfit_suggestion"], session["selected_item"])
-The returned caption is stored in:
-The returned caption is stored in:
+The agent calls create_fit_card(session["outfit_suggestion"], session["selected_item"])
+
+The returned caption is stored in: session["fit_card"] = fit_card
+
 **Final output to user:**
-<!-- What does the user actually see at the end? -->
 The user sees the selected thrift listing, an outfit suggestion using their wardrobe, and a short shareable fit card caption. If no listings were found, the user instead sees a helpful message suggesting that they broaden the search, increase the budget, or remove the size filter.
