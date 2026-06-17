@@ -141,7 +141,36 @@ For each tool, describe the specific failure mode you're handling and what the a
      You'll share this diagram with an AI tool when asking it to implement
      the planning loop and each individual tool. -->
 
-flowchart TD A[User Query] --> B[Planning Loop] B --> C[search_listings] C --> D{Results Found?} D -- No --> E[Set Error Message] E --> F[Return Session] D -- Yes --> G[Store selected_item in Session] G --> H[suggest_outfit] H --> I[Store outfit_suggestion in Session] I --> J[create_fit_card] J --> K[Store fit_card in Session] K --> L[Return Completed Session] M[(Session State)] G --> M I --> M J --> M M --> H M --> J
+## Architecture
+
+```mermaid
+flowchart TD
+    A[User Query] --> B[Planning Loop]
+
+    B --> C[search_listings]
+    C --> D{Results Found?}
+
+    D -- No --> E[Set session error message]
+    E --> F[Return session early]
+
+    D -- Yes --> G[Store selected_item in session]
+    G --> H[suggest_outfit]
+
+    H --> I[Store outfit_suggestion in session]
+    I --> J[create_fit_card]
+
+    J --> K[Store fit_card in session]
+    K --> L[Return completed session]
+
+    M[(Session State)]
+
+    G --> M
+    I --> M
+    J --> M
+
+    M --> H
+    M --> J
+```
 ---
 
 ## AI Tool Plan
